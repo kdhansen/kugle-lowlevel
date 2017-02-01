@@ -58,6 +58,10 @@ const int accelerometer_range = 2;
 const int gyro_range = 250;
 IMU imu(loop_rate, accelerometer_range, gyro_range);
 
+// Test motor velocity
+double vel = 0;
+double vel_delta = 0.1;
+
 void setup()
 {
     // Setup interrupts on encoders
@@ -76,19 +80,36 @@ void setup()
 }
 
 void loop() {
-
     // Check if it's time to update the loop
     unsigned long microsNow = micros();
-    if (microsNow - microsPrevious >= microsPerReading) {
+    // if (microsNow - microsPrevious >= microsPerReading) {
 
-        imu.update();
+    //     imu.update();
 
-        // print the heading, pitch and roll
-        Serial.print("Orientation: ");
-        Serial.print(imu.getRoll());
-        Serial.print(" ");
-        Serial.print(imu.getPitch());
-        Serial.print(" ");
-        Serial.println(imu.getYaw());
+    //     // print the heading, pitch and roll
+    //     Serial.print("Orientation: ");
+    //     Serial.print(imu.getRoll());
+    //     Serial.print(" ");
+    //     Serial.print(imu.getPitch());
+    //     Serial.print(" ");
+    //     Serial.println(imu.getYaw());
+
+    //     Serial.print("Position: ");
+    //     Serial.println(motors[0].getPosition());
+    // }
+
+    // Test motor velocity
+    if (microsNow - microsPrevious >= 1000000)
+    {
+        vel += vel_delta;
+        if (1. < vel || -1. > vel)
+        {
+            vel_delta = vel_delta * -1.;
+        }
+
+        motors[0].setVoltage(vel);
+        Serial.println(vel);
+        microsPrevious = microsNow;
     }
+
 }

@@ -12,7 +12,7 @@ private:
   int pos = 0;
 
 public:
-  enum mode {RUN, BRAKE, FREE};
+  enum mode {CW, CCW, BRAKE, FREE};
 
   Motor(int pwm, int enable_a, int enable_b, int encoder_a, int encoder_b);
 
