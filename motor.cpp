@@ -107,3 +107,35 @@ int Motor::getPosition()
 {
     return pos;
 }
+
+double Motor::getVelocity()
+{
+    return velocity;
+}
+
+void Motor::setVelocity(double v)
+{
+    ref_velocity = v;
+}
+
+void Motor::update(double d_t)
+{
+    // Update velocity
+    long d_pos = pos - old_pos;
+    // // Handle wrapping
+    // if (2147483647 < d_pos)
+    // {
+    //     d_pos = pos + (4294967296 - old_pos);
+    // }
+    velocity = 6.283185307179586 * d_pos / encoder_resolution / d_t;
+
+    // Update Controller
+    double e = ref_velocity - velocity;
+    double voltage = k_p * e;
+    setVoltage(voltage);
+}
+
+void Motor::setPGain(double p)
+{
+    k_p = p;
+}
