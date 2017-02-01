@@ -1,5 +1,7 @@
 #include "motor.h"
 #include "velocity_controller.h"
+#include "imu.h"
+
 
 // Motor 0 Connections
 const int pin_pwm_m0 = 3;
@@ -43,6 +45,16 @@ VelocityController vel_controllers[3] = {
     {motors[0]}, {motors[1]}, {motors[2]}
 };
 
+// Loop rate pacing
+const int loop_rate = 25;
+const unsigned long microsPerReading = 1000000 / loop_rate;
+unsigned long microsPrevious;
+
+// IMU
+const int accelerometer_range = 2;
+const int gyro_range = 250;
+IMU imu(loop_rate, accelerometer_range, gyro_range);
+
 void setup()
 {
     // Setup interrupts on encoders
@@ -55,9 +67,25 @@ void setup()
 
     // Setup the serial connection
     Serial.begin(9600);
+
+    // Initialize variables to pace updates to correct rate
+    microsPrevious = micros();
 }
 
 void loop() {
-    Serial.println(motors[0].getPosition());
-    delay(1000);
+
+    // Check if it's time to update the loop
+    unsigned long microsNow = micros();
+    if (microsNow - microsPrevious >= microsPerReading) {
+
+        imu.update();
+
+        // print the heading, pitch and roll
+        Serial.print("Orientation: ");
+        Serial.print(imu.getRoll());
+        Serial.print(" ");
+        Serial.print(imu.getPitch());
+        Serial.print(" ");
+        Serial.println(imu.getYaw());
+    }
 }
