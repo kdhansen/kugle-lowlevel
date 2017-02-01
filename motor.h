@@ -16,7 +16,8 @@ public:
 
   Motor(int pwm, int enable_a, int enable_b, int encoder_a, int encoder_b);
 
-  void onEncoderChange();
+  void onEncoderChangeA();
+  void onEncoderChangeB();
 
   void setVoltage(double v);
   void setMode(mode m);

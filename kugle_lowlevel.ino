@@ -35,9 +35,12 @@ Motor motors[3] = {
 // Interrupt service routines for the encoders.
 // The Arduino IDE does not let us set class members
 // as ISRs, so we wrap them here.
-void enc_isr0() {motors[0].onEncoderChange();}
-void enc_isr1() {motors[1].onEncoderChange();}
-void enc_isr2() {motors[2].onEncoderChange();}
+void enc_isr0A() {motors[0].onEncoderChangeA();}
+void enc_isr0B() {motors[0].onEncoderChangeB();}
+void enc_isr1A() {motors[1].onEncoderChangeA();}
+void enc_isr1B() {motors[1].onEncoderChangeB();}
+void enc_isr2A() {motors[2].onEncoderChangeA();}
+void enc_isr2B() {motors[2].onEncoderChangeB();}
 
 // Create an array of velocity controllers for
 // the motors.
@@ -58,12 +61,12 @@ IMU imu(loop_rate, accelerometer_range, gyro_range);
 void setup()
 {
     // Setup interrupts on encoders
-    attachInterrupt(pin_encoder_a_m0, enc_isr0, CHANGE);
-    attachInterrupt(pin_encoder_b_m0, enc_isr0, CHANGE);
-    attachInterrupt(pin_encoder_a_m1, enc_isr1, CHANGE);
-    attachInterrupt(pin_encoder_b_m1, enc_isr1, CHANGE);
-    attachInterrupt(pin_encoder_a_m2, enc_isr2, CHANGE);
-    attachInterrupt(pin_encoder_b_m2, enc_isr2, CHANGE);
+    attachInterrupt(pin_encoder_a_m0, enc_isr0A, CHANGE);
+    attachInterrupt(pin_encoder_b_m0, enc_isr0B, CHANGE);
+    attachInterrupt(pin_encoder_a_m1, enc_isr1A, CHANGE);
+    attachInterrupt(pin_encoder_b_m1, enc_isr1B, CHANGE);
+    attachInterrupt(pin_encoder_a_m2, enc_isr2A, CHANGE);
+    attachInterrupt(pin_encoder_b_m2, enc_isr2B, CHANGE);
 
     // Setup the serial connection
     Serial.begin(9600);
