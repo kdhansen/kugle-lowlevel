@@ -1,8 +1,6 @@
 #include "arduino.h"
 #include "motor.h"
 
-typedef void(*isrFnc_t)(void);
-
 Motor::Motor(int pwm, int enable_a, int enable_b, int encoder_a, int encoder_b)
 {
     pwm_pin = pwm;
